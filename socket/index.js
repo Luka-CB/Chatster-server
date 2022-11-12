@@ -9,6 +9,9 @@ const {
   addGroupChatUsers,
   getGroupChatUsers,
   removeGroupChatUser,
+  addUserToOpenedWindow,
+  getChatWindowUsers,
+  removeChatWindowUser,
 } = require("./utils");
 
 module.exports = (io) => {
@@ -23,13 +26,19 @@ module.exports = (io) => {
 
     socket.on("sendMessage", (data) => {
       const user = getUser(data.receiverId);
-      if (!user) console.log("user is not online");
+      if (!user) {
+        console.log("user is not online");
+        return;
+      }
       io.to(user.socketId).emit("getMessage", data);
     });
 
     socket.on("sendUnreadMessage", (data) => {
       const user = getUser(data.receiverId);
-      if (!user) console.log("user is not online");
+      if (!user) {
+        console.log("user is not online");
+        return;
+      }
       io.to(user.socketId).emit("getUnreadMessage", data);
     });
 
@@ -70,6 +79,19 @@ module.exports = (io) => {
       users.forEach((user) => {
         io.to(user.socketId).emit("getUnreadGroupMessage", data);
       });
+    });
+
+    socket.on("onAddUserToChatWindow", (userId) => {
+      if (userId) addUserToOpenedWindow(userId);
+      io.emit("getOpenedWindowUsers", getChatWindowUsers());
+    });
+
+    socket.on("onRemoveUserFromChatWindow", (userId) => {
+      if (userId) {
+        removeChatWindowUser(userId);
+
+        io.emit("getOpenedWindowUsers", getChatWindowUsers());
+      }
     });
 
     socket.on("closeChat", (groupId) => {

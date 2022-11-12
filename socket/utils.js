@@ -1,6 +1,7 @@
 let users = [];
 let groups = [];
 let groupChatUsers = [];
+let usersOpenedChatWindow = [];
 
 const addUser = (userId, socketId) => {
   !users.some((user) => user.userId === userId) &&
@@ -43,6 +44,19 @@ const removeGroupChatUser = (userId) => {
   return groupChatUsers;
 };
 
+const addUserToOpenedWindow = (userId) => {
+  !usersOpenedChatWindow.some((user) => user.userId === userId) &&
+    usersOpenedChatWindow.push(userId);
+};
+
+const getChatWindowUsers = () => usersOpenedChatWindow;
+
+const removeChatWindowUser = (userId) => {
+  usersOpenedChatWindow = usersOpenedChatWindow.filter(
+    (user) => user !== userId
+  );
+};
+
 module.exports = {
   addUser,
   removeUser,
@@ -54,4 +68,7 @@ module.exports = {
   addGroupChatUsers,
   getGroupChatUsers,
   removeGroupChatUser,
+  addUserToOpenedWindow,
+  getChatWindowUsers,
+  removeChatWindowUser,
 };
