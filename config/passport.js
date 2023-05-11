@@ -9,7 +9,10 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/api/auth/google/callback",
+      callbackURL:
+        process.env.NODE_ENV === "development"
+          ? "/api/auth/google/callback"
+          : "https://chatster-server-production.up.railway.app/api/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       const newUser = {
@@ -40,7 +43,10 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      callbackURL: "/api/auth/facebook/callback",
+      callbackURL:
+        process.env.NODE_ENV === "development"
+          ? "/api/auth/facebook/callback"
+          : "https://chatster-server-production.up.railway.app/api/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       const newUser = {
