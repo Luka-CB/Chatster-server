@@ -2,6 +2,9 @@ const asyncHandler = require("express-async-handler");
 const cloudinary = require("../config/cloudinary");
 const Group = require("../models/Group");
 const User = require("../models/User");
+const GroupMsg = require("../models/GroupMessage");
+const GroupReq = require("../models/GroupRequest");
+const UnreadGroupMsg = require("../models/UnreadGroupMsg");
 
 // CREATE GROUP
 // ROUTE - POST - /api/groups/create
@@ -188,6 +191,24 @@ const updateGroupName = asyncHandler(async (req, res) => {
   res.status(200).send("success");
 });
 
+// DELETE GROUP
+// ROUTE - DELETE - /api/groups/delete
+// PRIVATE - USER
+const deleteGroup = asyncHandler(async (req, res) => {
+  const { groupId } = req.params;
+
+  const group = await Group.findByIdAndDelete(groupId);
+
+  if (!group) throw new Error("Request to delete group has failed!");
+
+  await GroupMsg.deleteMany({ _id: { $in: group.groupMessages } });
+  await GroupReq.deleteMany({ _id: { $in: group.requests } });
+  await UnreadGroupMsg.deleteMany({ groupId: group._id });
+  if (group.imageId) await cloudinary.uploader.destroy(group.imageId);
+
+  res.send("Deleted Successfully!");
+});
+
 module.exports = {
   createGroup,
   fetchGroups,
@@ -199,4 +220,5 @@ module.exports = {
   updateGroupImage,
   removeGroupImage,
   updateGroupName,
+  deleteGroup,
 };

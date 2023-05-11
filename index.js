@@ -22,7 +22,7 @@ const io = new Server(server, {
 
 require("./socket/index")(io);
 
-app.use(express.json());
+app.use(express.json({ limit: "25mb" }));
 app.use(
   cors({
     origin: process.env.CLIENT_URL,

@@ -17,7 +17,7 @@ router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: process.env.CLIENT_URL,
+    successRedirect: process.env.CLIENT_REDIRECT_URL,
     failureRedirect: "/login/failed",
   })
 );
@@ -30,7 +30,7 @@ router.get(
 router.get(
   "/facebook/callback",
   passport.authenticate("facebook", {
-    successRedirect: process.env.CLIENT_URL,
+    successRedirect: process.env.CLIENT_REDIRECT_URL,
     failureRedirect: "/login/failed",
   })
 );
