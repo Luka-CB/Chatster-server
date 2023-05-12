@@ -41,7 +41,7 @@ const register = asyncHandler(async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
       maxAge: 60 * 60 * 24 * 7 * 30,
-      sameSite: "strict",
+      sameSite: "none",
       path: "/",
     })
   );
@@ -75,7 +75,7 @@ const login = asyncHandler(async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
       maxAge: 60 * 60 * 24 * 7 * 30,
-      sameSite: "strict",
+      sameSite: "none",
       path: "/",
     })
   );
@@ -273,7 +273,7 @@ const logout = asyncHandler(async (req, res) => {
       httpOnly: false,
       secure: process.env.NODE_ENV !== "development",
       maxAge: new Date(0),
-      sameSite: "strict",
+      sameSite: "none",
       path: "/",
     })
   );
