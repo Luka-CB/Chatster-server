@@ -33,6 +33,8 @@ app.use(
   cookieSession({
     name: "simpleChatOauthSession",
     keys: ["someKey"],
+    sameSite: "none",
+    secure: true,
     maxAge: 24 * 60 * 60 * 100 * 30,
   })
 );
