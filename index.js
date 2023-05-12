@@ -25,7 +25,7 @@ require("./socket/index")(io);
 app.use(express.json({ limit: "25mb" }));
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: [process.env.CLIENT_URL, "http://localhost:3000"],
     credentials: true,
   })
 );
