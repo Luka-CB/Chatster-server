@@ -40,6 +40,8 @@ const register = asyncHandler(async (req, res) => {
     cookie.serialize("simpleChatToken", token, {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 7 * 30,
+      sameSite: "none",
+      secure: true,
       path: "/",
     })
   );
@@ -72,6 +74,8 @@ const login = asyncHandler(async (req, res) => {
     cookie.serialize("simpleChatToken", token, {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 7 * 30,
+      sameSite: "none",
+      secure: true,
       path: "/",
     })
   );
@@ -268,6 +272,8 @@ const logout = asyncHandler(async (req, res) => {
     cookie.serialize("simpleChatToken", "", {
       httpOnly: false,
       maxAge: new Date(0),
+      sameSite: "none",
+      secure: true,
       path: "/",
     })
   );
