@@ -17,8 +17,8 @@ router.route("/login").post(login);
 router.route("/search").get(auth, searchUser);
 router.route("/profile").get(auth, getProfile);
 router.route("/profile/update").put(auth, updateProfile);
-router.route("/profile/upload_prof_img").post(auth, uploadProfileImage);
-router.route("/profile/remove_prof_img").put(auth, removeProfileImage);
+router.route("/upload_img").put(auth, uploadProfileImage);
+router.route("/remove_img").put(auth, removeProfileImage);
 router.route("/delete").delete(auth, deleteUser);
 router.route("/logout").get(auth, logout);
 

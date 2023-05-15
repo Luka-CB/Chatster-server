@@ -150,8 +150,8 @@ const updateProfile = asyncHandler(async (req, res) => {
   res.status(200).send("success");
 });
 
-// UPLOAD PROVILE AVATAR
-// ROUTE - POST - /api/users/profile/upload_prof_img
+// UPLOAD PROFILE AVATAR
+// ROUTE - POST - /api/users/upload_img
 // PRIVATE - USER
 const uploadProfileImage = asyncHandler(async (req, res) => {
   const { image } = req.body;
@@ -168,7 +168,7 @@ const uploadProfileImage = asyncHandler(async (req, res) => {
 
   await User.updateOne(
     { _id: req.user._id },
-    { avatar: result.url, imageId: result.public_id }
+    { avatar: result.secure_url, imageId: result.public_id }
   );
 
   res
@@ -176,8 +176,8 @@ const uploadProfileImage = asyncHandler(async (req, res) => {
     .json({ msg: "Uploaded Successfully!", addedImage: result.url });
 });
 
-// REMOVE PROVILE AVATAR
-// ROUTE - PUT - /api/users/profile/remove_prof_img
+// REMOVE PROFILE AVATAR
+// ROUTE - PUT - /api/users/remove_img
 // PRIVATE - USER
 const removeProfileImage = asyncHandler(async (req, res) => {
   const user = await User.findOne({ _id: req.user._id }, "imageId");

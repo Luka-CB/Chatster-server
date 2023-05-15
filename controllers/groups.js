@@ -5,6 +5,7 @@ const User = require("../models/User");
 const GroupMsg = require("../models/GroupMessage");
 const GroupReq = require("../models/GroupRequest");
 const UnreadGroupMsg = require("../models/UnreadGroupMsg");
+const { removeImage, uploadImage } = require("../utils/cloudinary");
 
 // CREATE GROUP
 // ROUTE - POST - /api/groups/create
@@ -132,23 +133,25 @@ const leaveGroup = asyncHandler(async (req, res) => {
 });
 
 // UPDATE GROUP IMAGE
-// ROUTE - PUT - /api/groups/update_img
+// ROUTE - PUT - /api/groups/upload_img
 // PRIVATE - USER
 const updateGroupImage = asyncHandler(async (req, res) => {
-  const { imageUrl, publicId } = req.body;
-  const { groupId } = req.query;
+  const { image, id } = req.body;
 
-  const group = await Group.findOne({ _id: groupId }, "image imageId");
+  const group = await Group.findOne({ _id: id }, "image imageId");
 
   if (group.image && group.imageId) {
-    await cloudinary.uploader.destroy(group.imageId);
+    const result = await removeImage(group.imageId);
+    if (!result) throw new Error("Something went wrong!");
   }
 
-  const updatedGroup = await Group.updateOne(
-    { _id: groupId },
-    { image: imageUrl, imageId: publicId }
-  );
+  const result = await uploadImage(image, "group-images");
+  if (!result) throw new Error("Upload image request has failed!");
 
+  const updatedGroup = await Group.updateOne(
+    { _id: id },
+    { image: result.secure_url, imageId: result.public_id }
+  );
   if (!updatedGroup) throw new Error("Update Group Image Request has Failed!");
 
   res.status(200).send("success");
@@ -158,14 +161,15 @@ const updateGroupImage = asyncHandler(async (req, res) => {
 // ROUTE - PUT - /api/groups/remove_img
 // PRIVATE - USER
 const removeGroupImage = asyncHandler(async (req, res) => {
-  const { groupId } = req.query;
+  const { id } = req.body;
 
-  const group = await Group.findOne({ _id: groupId }, "imageId");
+  const group = await Group.findOne({ _id: id }, "imageId");
 
-  await cloudinary.uploader.destroy(group.imageId);
+  const result = await removeImage(group.imageId);
+  if (!result) throw new Error("Something went wrong!");
 
   const updatedGroup = await Group.updateOne(
-    { _id: groupId },
+    { _id: id },
     { image: "", imageId: "" }
   );
 
