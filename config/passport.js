@@ -12,7 +12,7 @@ passport.use(
       callbackURL:
         process.env.NODE_ENV === "development"
           ? "/api/auth/google/callback"
-          : "https://chatster-server-production.up.railway.app/api/auth/google/callback",
+          : "https://chatster-api.onrender.com/api/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       const newUser = {
@@ -46,7 +46,7 @@ passport.use(
       callbackURL:
         process.env.NODE_ENV === "development"
           ? "/api/auth/facebook/callback"
-          : "https://chatster-server-production.up.railway.app/api/auth/facebook/callback",
+          : "https://chatster-api.onrender.com/api/auth/facebook/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       const newUser = {
