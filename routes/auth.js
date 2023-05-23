@@ -30,14 +30,14 @@ router.get(
 router.get(
   "/facebook/callback",
   passport.authenticate("facebook", {
-    successRedirect: process.env.CLIENT_REDIRECT_URL,
+    successRedirect: "https://chatster-orcin.vercel.app/redirect",
     failureRedirect: "/login/failed",
   })
 );
 
 router.get("/logout", (req, res) => {
   req.logOut();
-  res.redirect(process.env.CLIENT_URL);
+  res.redirect("https://chatster-orcin.vercel.app");
 });
 
 module.exports = router;
