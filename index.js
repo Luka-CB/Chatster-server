@@ -29,13 +29,19 @@ app.use(
     credentials: true,
   })
 );
+
+app.set("trust proxy", 1);
+
 app.use(
   cookieSession({
     name: "simpleChatOauthSession",
-    keys: ["someKey"],
+    keys: ["someKey", "someotherkey"],
+    sameSite: "none",
+    secure: true,
     maxAge: 24 * 60 * 60 * 100 * 30,
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
 
