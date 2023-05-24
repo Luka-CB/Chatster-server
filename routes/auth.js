@@ -17,7 +17,10 @@ router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: process.env.CLIENT_REDIRECT_URL,
+    successRedirect:
+      process.env.NODE_ENV === "development"
+        ? process.env.CLIENT_REDIRECT_URL
+        : "https://chatster-orcin.vercel.app/redirect",
     failureRedirect: "/login/failed",
   })
 );
@@ -30,14 +33,21 @@ router.get(
 router.get(
   "/facebook/callback",
   passport.authenticate("facebook", {
-    successRedirect: "https://chatster-orcin.vercel.app/redirect",
+    successRedirect:
+      process.env.NODE_ENV === "development"
+        ? process.env.CLIENT_REDIRECT_URL
+        : "https://chatster-orcin.vercel.app/redirect",
     failureRedirect: "/login/failed",
   })
 );
 
 router.get("/logout", (req, res) => {
   req.logOut();
-  res.redirect("https://chatster-orcin.vercel.app");
+  res.redirect(
+    process.env.NODE_ENV === "development"
+      ? process.env.CLIENT_REDIRECT_URL
+      : "https://chatster-orcin.vercel.app"
+  );
 });
 
 module.exports = router;
